@@ -13,7 +13,9 @@
     ></script>
     <script src="./public/detail.js" defer></script>
   </head>
-  <body class="font-NunitoSans text-base bg-light-100 dark:bg-dark-200">
+  <body
+    class="font-NunitoSans text-base bg-light-100 dark:bg-dark-200 text-light-300 dark:text-white"
+  >
     <div
       id="loader-container"
       class="h-full absolute inset-0 z-50 bg-light-100 dark:bg-dark-200 hidden justify-center items-center"
@@ -24,9 +26,7 @@
       ></div>
     </div>
     <section id="page-header" class="shadow bg-white dark:bg-dark-100 relative">
-      <nav
-        class="container py-6 flex justify-between items-center text-light-300 dark:text-white"
-      >
+      <nav class="container py-6 flex justify-between items-center">
         <div class="title">
           <h1 class="text-xl font-bold">Where in the world?</h1>
         </div>
@@ -42,19 +42,79 @@
       </nav>
     </section>
     <main class="py-10 bg-light-100 dark:bg-dark-200">
-      <div id="back-btn" class="container flex">
-        <a
-          href="./index.html"
-          class="mr-auto py-2 px-4 flex gap-2 items-center bg-white dark:bg-dark-100 hover:bg-gray-50 dark:hover:bg-[#2f3e4c] text-light-300 dark:text-white rounded shadow transition-colors duration-200"
-        >
+      <div id="back-btn" class="container flex select-none">
+        <a href="./index.html" class="btn mr-auto flex gap-2 items-center">
           <i class="fa-solid fa-arrow-left"></i>
           <p>Back</p>
         </a>
       </div>
       <section
         id="country-detail"
-        class="flex justify-between flex-col sm:flex-row"
-      ></section>
+        class="container mt-20 sm:flex justify-between md:items-center flex-col md:flex-row"
+      >
+        <div
+          id="img-holder"
+          class="md:w-1/3 sm:mr-16 xl:mr-24 rounded shrink-0 overflow-hidden shadow-md"
+        >
+          <img
+            src="https://flagcdn.com/w320/ax.png"
+            alt="flag"
+            class="object-cover w-full shadow-md"
+          />
+        </div>
+        <div
+          class="details-container mt-10 md:mt-0 flex flex-wrap flex-col md:flex-row justify-between"
+        >
+          <h2 id="country-name" class="w-full font-extrabold text-2xl">
+            Åland Islands
+          </h2>
+          <div
+            id="info-container"
+            class="flex flex-wrap justify-between items-center"
+          >
+            <div id="general-info" class="mt-6 space-y-3 sm:space-y-0">
+              <p class="population text-base font-semibold tracking-wider">
+                Population: <span class="text-sm font-light">28875</span>
+              </p>
+              <p class="region text-base font-semibold tracking-wider">
+                Region: <span class="text-sm font-light">Europe</span>
+              </p>
+              <p class="sub-region text-base font-semibold tracking-wider">
+                Sub Region: <span class="text-sm font-light">Brussels</span>
+              </p>
+              <p class="capital text-base font-semibold tracking-wider">
+                Capital: <span class="text-sm font-light">Mariehamn</span>
+              </p>
+            </div>
+            <div id="extra-info" class="mt-10 lg:mt-0 space-y-3 sm:space-y-0">
+              <p
+                id="top-level-domain"
+                class="text-base font-semibold tracking-wider"
+              >
+                Top Level Domain: <span class="text-sm font-light">.be</span>
+              </p>
+              <p id="cuurencies" class="text-base font-semibold tracking-wider">
+                Currencies: <span class="text-sm font-light">Euro</span>
+              </p>
+              <p id="languages" class="text-base font-semibold tracking-wider">
+                Languages:
+                <span class="text-sm font-light">Dutch, French, German</span>
+              </p>
+            </div>
+            <div id="border-countries-container" class="w-full mt-10">
+              <h4 class="mb-4 text-lg font-semibold">Border Countries:</h4>
+              <div
+                id="border-countries"
+                class="flex gap-4 flex-wrap text-sm select-none"
+              >
+                <div class="country btn">Country1</div>
+                <div class="country btn">Country2</div>
+                <div class="country btn">Country3</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
   </body>
 </html>

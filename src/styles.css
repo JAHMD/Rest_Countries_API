@@ -30,6 +30,9 @@ html.dark ::-webkit-scrollbar-thumb {
 .card {
   @apply rounded bg-white hover:bg-gray-50 dark:bg-dark-100 overflow-hidden text-light-300 dark:text-white shadow hover:transition-colors hover:duration-200 cursor-pointer  dark:hover:bg-[#2f3e4c];
 }
+.btn {
+  @apply py-2 px-6 rounded shadow cursor-pointer bg-white dark:bg-dark-100 hover:bg-gray-50 dark:hover:bg-[#2f3e4c] transition-colors duration-200;
+}
 @layer components {
   #regions.active {
     height: 176px;

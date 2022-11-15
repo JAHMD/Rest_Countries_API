@@ -43,5 +43,7 @@ regionFilter.addEventListener("click", (e) => {
 
 // go to country details
 card.addEventListener("click", () => {
-  location.assign("../detail.html");
+  // location.assign("./detail.html");
+  console.log(window);
+  window.location.assign("./detail.html");
 });
