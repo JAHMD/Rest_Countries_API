@@ -1,0 +1,36 @@
+home page {
+  - nav {
+    - title
+    - mode toggler
+  },
+  header {
+    - search bar
+    - region filter
+  },
+  main section {
+    cards {
+      - flag
+      - name
+      - population
+      - region
+      - capital
+      -> details {
+          - back btn
+          - section {
+              - flag
+              - name
+              - native name
+              - population
+              - region
+              - sub region
+              - capital
+              - top level domain
+              - currencies
+              - languages
+              - border countries
+          }
+
+      }
+    }
+  }
+}
