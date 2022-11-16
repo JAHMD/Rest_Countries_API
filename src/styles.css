@@ -14,7 +14,7 @@
   --rounded: 0.25rem;
 }
 ::-webkit-scrollbar {
-  width: 5px;
+  width: 8px;
   border-radius: var(--rounded);
 }
 ::-webkit-scrollbar-thumb {
@@ -27,16 +27,18 @@
 html.dark ::-webkit-scrollbar-thumb {
   background-color: var(--dark-border);
 }
+#regions .region {
+  @apply hover:bg-light-100 dark:hover:bg-dark-200 py-2 px-4 rounded transition-colors cursor-pointer;
+}
 .card {
-  @apply rounded bg-white hover:bg-gray-50 dark:bg-dark-100 overflow-hidden text-light-300 dark:text-white shadow hover:transition-colors hover:duration-200 cursor-pointer  dark:hover:bg-[#2f3e4c];
+  @apply rounded bg-white hover:bg-gray-50 dark:bg-dark-100 overflow-hidden text-light-300 dark:text-white shadow cursor-pointer  dark:hover:bg-[#2f3e4c] hover:scale-[1.02] hover:transition hover:duration-200;
 }
 .btn {
   @apply py-2 px-6 rounded shadow cursor-pointer bg-white dark:bg-dark-100 hover:bg-gray-50 dark:hover:bg-[#2f3e4c] transition-colors duration-200;
 }
 @layer components {
-  #regions.active {
+  #menu-container.active {
     height: 176px;
     opacity: 1;
-    transition: height 200ms, opacity 200ms;
   }
 }

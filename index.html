@@ -16,7 +16,7 @@
   <body class="font-NunitoSans text-sm bg-light-100 dark:bg-dark-200">
     <div
       id="loader-container"
-      class="h-full absolute inset-0 z-50 bg-light-100 dark:bg-dark-200 hidden justify-center items-center"
+      class="h-full absolute inset-0 z-50 bg-light-100 dark:bg-dark-200 flex justify-center items-center"
     >
       <div
         id="loader"
@@ -28,27 +28,27 @@
         class="container py-6 flex justify-between items-center text-light-300 dark:text-white"
       >
         <div class="title">
-          <h1 class="text-xl font-bold">Where in the world?</h1>
+          <h1 class="text-lg md:text-xl font-bold">Where in the world?</h1>
         </div>
         <div
           id="mode-container"
-          class="py-2 px-4 rounded flex items-center gap-3 font-semibold bg-light-100 dark:bg-[#222f3a] hover:bg-[#f2f2f2] dark:hover:bg-dark-200 transition-colors cursor-pointer select-none"
+          class="py-2 px-4 rounded flex items-center gap-3 font-semibold bg-light-100 dark:bg-dark-200 cursor-pointer select-none"
         >
-          <div id="mode-btn-icon" class="text-xl transition-all">
+          <div id="mode-btn-icon" class="text-xl">
             <i id="mode-icon" class="fa-solid fa-sun"></i>
           </div>
           <p id="mode"><span class="inline-block"></span> Mode</p>
         </div>
       </nav>
     </section>
-    <main class="py-10 bg-light-100 dark:bg-dark-200">
+    <main class="py-10 bg-light-100 dark:bg-dark-200 relative overflow-hidden">
       <section
-        id="search-seciton"
-        class="container mb-8 flex sm:justify-between sm:items-center flex-col sm:flex-row"
+        id="search-section"
+        class="container mb-8 flex sm:justify-between sm:items-center flex-col sm:flex-row z-20 relative"
       >
         <div
           id="search-bar"
-          class="sm:w-2/5 mb-8 sm:mb-0 py-4 px-6 flex items-center rounded bg-white text-light-300 dark:text-white dark:bg-dark-100"
+          class="sm:w-2/5 mb-8 sm:mb-0 py-4 px-6 flex items-center rounded bg-white text-light-300 dark:text-white dark:bg-dark-100 shadow"
         >
           <i class="fa-solid fa-magnifying-glass inline-block mr-4"></i>
           <input
@@ -60,70 +60,38 @@
         <div id="region-filter" class="w-fit relative select-none">
           <div
             id="filter"
-            class="py-3 px-6 rounded flex justify-between items-center w-52 bg-white dark:bg-dark-100 text-light-300 dark:text-white cursor-pointer"
+            class="py-3 px-6 rounded flex justify-between items-center w-52 bg-white dark:bg-dark-100 text-light-300 dark:text-white cursor-pointer shadow"
           >
             <p>Filter by Region</p>
             <i
-              class="fa-solid fa-caret-right inline-block transition-transform duration-200"
+              class="fa-solid fa-caret-right inline-block transition-transform duration-100"
             ></i>
           </div>
-          <ul
-            id="regions"
-            class="w-full h-0 p-4 rounded opacity-0 overflow-auto text-light-300 dark:text-white bg-white dark:bg-dark-100 absolute top-14 left-0 duration-200"
+          <div
+            id="menu-container"
+            class="w-full h-0 p-4 rounded absolute top-14 left-0 opacity-0 bg-white dark:bg-dark-100 text-light-300 dark:text-white duration-100 ease-out overflow-hidden shadow-md transition-all"
           >
-            <li
-              class="hover:bg-light-100 dark:hover:bg-dark-200 py-2 px-4 rounded transition-colors cursor-pointer"
-            >
-              Region1
-            </li>
-            <li
-              class="hover:bg-light-100 dark:hover:bg-dark-200 py-2 px-4 rounded transition-colors cursor-pointer"
-            >
-              Region1
-            </li>
-            <li
-              class="hover:bg-light-100 dark:hover:bg-dark-200 py-2 px-4 rounded transition-colors cursor-pointer"
-            >
-              Region1
-            </li>
-            <li
-              class="hover:bg-light-100 dark:hover:bg-dark-200 py-2 px-4 rounded transition-colors cursor-pointer"
-            >
-              Region1
-            </li>
-          </ul>
+            <ul id="regions" class="h-full overflow-auto rounded">
+              <li class="region">Africa</li>
+              <li class="region">Americas</li>
+              <li class="region">Antarctic</li>
+              <li class="region">Asia</li>
+              <li class="region">Europe</li>
+              <li class="region">Oceania</li>
+            </ul>
+          </div>
         </div>
       </section>
       <section
         id="cards-container"
         class="container space-y-8 sm:space-y-0 sm:grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 flex-wrap"
+      ></section>
+      <div
+        id="to-top-btn"
+        class="fixed bottom-4 right-4 bg-light-300 text-white dark:bg-white dark:text-dark-200 p-1.5 rounded cursor-pointer transition translate-x-16"
       >
-        <div class="card">
-          <div class="img-holder">
-            <img
-              src="https://flagcdn.com/w320/ax.png"
-              alt="flag"
-              class="object-cover w-full"
-            />
-          </div>
-          <div class="text-content p-6">
-            <h3 class="country-name mb-6 font-extrabold text-xl">
-              Åland Islands
-            </h3>
-            <div class="info space-y-2">
-              <p class="population font-semibold tracking-wider">
-                Population: <span class="text-sm font-light">28875</span>
-              </p>
-              <p class="Region font-semibold tracking-wider">
-                Region: <span class="text-sm font-light">Europe</span>
-              </p>
-              <p class="capital font-semibold tracking-wider">
-                Capital: <span class="text-sm font-light">Mariehamn</span>
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+        <i class="fa-solid fa-circle-up text-2xl"></i>
+      </div>
     </main>
   </body>
 </html>
