@@ -519,8 +519,8 @@ video {
   width: 100%;
   margin-right: auto;
   margin-left: auto;
-  padding-right: 2rem;
-  padding-left: 2rem;
+  padding-right: 1.5rem;
+  padding-left: 1.5rem;
 }
 
 @media (min-width: 640px){
@@ -593,12 +593,24 @@ video {
   right: 1rem;
 }
 
+.top-0{
+  top: 0px;
+}
+
 .z-50{
   z-index: 50;
 }
 
+.z-10{
+  z-index: 10;
+}
+
 .z-20{
   z-index: 20;
+}
+
+.z-40{
+  z-index: 40;
 }
 
 .mb-8{
@@ -737,16 +749,16 @@ video {
   justify-content: space-between;
 }
 
-.gap-3{
-  gap: 0.75rem;
+.gap-2{
+  gap: 0.5rem;
 }
 
 .gap-6{
   gap: 1.5rem;
 }
 
-.gap-2{
-  gap: 0.5rem;
+.gap-3{
+  gap: 0.75rem;
 }
 
 .gap-4{
@@ -885,11 +897,6 @@ video {
   line-height: 1.75rem;
 }
 
-.text-xl{
-  font-size: 1.25rem;
-  line-height: 1.75rem;
-}
-
 .text-2xl{
   font-size: 1.5rem;
   line-height: 2rem;
@@ -898,6 +905,11 @@ video {
 .text-base{
   font-size: 1rem;
   line-height: 1.5rem;
+}
+
+.text-xl{
+  font-size: 1.25rem;
+  line-height: 1.75rem;
 }
 
 .font-bold{
@@ -985,8 +997,8 @@ video {
   transition-duration: 150ms;
 }
 
-.duration-100{
-  transition-duration: 100ms;
+.duration-200{
+  transition-duration: 200ms;
 }
 
 .ease-out{
@@ -1173,10 +1185,6 @@ html.dark ::-webkit-scrollbar-thumb {
     display: flex;
   }
 
-  .sm\:grid{
-    display: grid;
-  }
-
   .sm\:w-2\/5{
     width: 40%;
   }
@@ -1209,6 +1217,10 @@ html.dark ::-webkit-scrollbar-thumb {
     margin-top: 0px;
   }
 
+  .md\:grid{
+    display: grid;
+  }
+
   .md\:h-36{
     height: 9rem;
   }
@@ -1217,16 +1229,22 @@ html.dark ::-webkit-scrollbar-thumb {
     width: 33.333333%;
   }
 
-  .md\:grid-cols-3{
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
   .md\:flex-row{
     flex-direction: row;
   }
 
   .md\:items-center{
     align-items: center;
+  }
+
+  .md\:gap-4{
+    gap: 1rem;
+  }
+
+  .md\:space-y-0 > :not([hidden]) ~ :not([hidden]){
+    --tw-space-y-reverse: 0;
+    margin-top: calc(0px * calc(1 - var(--tw-space-y-reverse)));
+    margin-bottom: calc(0px * var(--tw-space-y-reverse));
   }
 
   .md\:text-xl{
@@ -1238,6 +1256,10 @@ html.dark ::-webkit-scrollbar-thumb {
 @media (min-width: 1024px){
   .lg\:mt-0{
     margin-top: 0px;
+  }
+
+  .lg\:grid-cols-3{
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
