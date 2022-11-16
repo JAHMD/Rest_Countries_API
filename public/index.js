@@ -85,17 +85,18 @@ async function generateAndShowCards(url) {
   const documentFragment = document.createDocumentFragment();
   // looping through the countries
   countries.forEach((country) => {
-    const cardContainer = document.createElement("div");
-    cardContainer.classList.add("card");
-    // creating country flag
-    const flag = createFlag(country);
-    // creating country general info
-    const generalInfo = createGeneralInfo(country);
-    // appending country's info to country's card
-    cardContainer.append(flag, generalInfo);
-    // appending country's card to the document fragment
-    documentFragment.append(cardContainer);
-    // if (index === countries.length - 1) resolve();
+    if (country.name.common !== "Israel") {
+      const cardContainer = document.createElement("div");
+      cardContainer.classList.add("card");
+      // creating country flag
+      const flag = createFlag(country);
+      // creating country general info
+      const generalInfo = createGeneralInfo(country);
+      // appending country's info to country's card
+      cardContainer.append(flag, generalInfo);
+      // appending country's card to the document fragment
+      documentFragment.append(cardContainer);
+    }
   });
   cardsContainer.append(documentFragment);
   loader.classList.add("hidden");
@@ -105,7 +106,7 @@ async function generateAndShowCards(url) {
 function createFlag(country) {
   // flag holder
   const flagContainer = document.createElement("div");
-  flagContainer.classList.add(..."img-holder h-44 md:h-36 flex".split(" "));
+  flagContainer.classList.add(..."img-holder h-44 lg:h-40 flex".split(" "));
   // flag
   const flagImg = document.createElement("img");
   flagImg.classList.add(..."object-cover w-full h-full".split(" "));
@@ -123,7 +124,9 @@ function createGeneralInfo(country) {
   // country's name
   const countryName = document.createElement("h3");
   countryName.classList.add(
-    ..."country-name mb-6 font-extrabold text-xl".split(" ")
+    ..."country-name mb-6 font-extrabold text-xl text-light-300 dark:text-dark-300".split(
+      " "
+    )
   );
   countryName.innerText = country.name.common;
   // country info
