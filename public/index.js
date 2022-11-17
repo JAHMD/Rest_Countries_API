@@ -1,38 +1,34 @@
 const BASE_URL = "https://restcountries.com/v3/all";
 const loader = document.getElementById("loader-container");
+// header
 const html = document.documentElement;
 const header = document.getElementById("search-section");
-const searchBar = document.getElementById("search-bar");
 const modeBtn = document.getElementById("mode-container");
 const modeIcon = document.getElementById("mode-icon");
 const modeText = document.querySelector("#mode-container #mode  span");
+// search
+const searchBar = document.getElementById("search-bar");
+const searchInput = document.getElementById("search-input");
+// filter
 const regionsFilter = document.getElementById("region-filter");
 const regionsMenu = document.getElementById("menu-container");
+const regions = [...regionsMenu.querySelectorAll("li")];
+// cards
 const cardsContainer = document.getElementById("cards-container");
-const cards = document.querySelectorAll("#cards-container .card");
+const noCardsFound = document.getElementById("no-countries");
+// additional
 const toTopBtn = document.getElementById("to-top-btn");
+const options = {
+  url: BASE_URL,
+  region: "All",
+  searchValue: "",
+  countries: [],
+  state: false,
+};
 
-// show "to top" button
-window.addEventListener("scroll", () => {
-  if (scrollY >= 300) {
-    toTopBtn.classList.remove("translate-x-16");
-    toTopBtn.classList.add("translate-x-0");
-  } else {
-    toTopBtn.classList.add("translate-x-16");
-    toTopBtn.classList.remove("translate-x-0");
-  }
-});
-
-toTopBtn.addEventListener("click", () => {
-  window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
-});
-// assign the chosen mode to the page
-window.addEventListener("load", () => {
-  html.className = localStorage.getItem("mode");
-  html.classList.contains("dark")
-    ? (modeText.innerText = "Light")
-    : (modeText.innerText = "Dark");
-});
+// app starts here
+document.addEventListener("loadstart", setTheMode());
+startTheApp(options);
 
 // change page mode
 modeBtn.addEventListener("click", () => {
@@ -51,23 +47,54 @@ modeBtn.addEventListener("click", () => {
   }
 });
 
+// search bar function
+searchInput.addEventListener("input", function () {
+  options.searchValue = this.value;
+  options.state = true;
+  showCards(options);
+});
+
 // toggling the regions menu and chose a region to show
 regionsFilter.addEventListener("click", (e) => {
+  options.state = true;
   regionsMenu.classList.toggle("active");
   regionsFilter.querySelector("i").classList.toggle("rotate-90");
-  const regions = regionsMenu.querySelectorAll("li");
-  if ([...regions].includes(e.target)) {
-    regionsFilter.querySelector("#filter p").textContent = e.target.textContent;
+  // change the filter name
+  if (regions.includes(e.target)) {
+    regionsFilter.querySelector("#filter p").innerText = e.target.innerText;
+    const selectedRegion = e.target.innerText;
+    options.region = selectedRegion;
+    showCards(options);
   }
 });
 
-// app starting here
-generateAndShowCards(BASE_URL);
+// show "to top" button
+window.addEventListener("scroll", () => {
+  if (scrollY >= 300) {
+    toTopBtn.classList.remove("translate-x-16");
+    toTopBtn.classList.add("translate-x-0");
+  } else {
+    toTopBtn.classList.add("translate-x-16");
+    toTopBtn.classList.remove("translate-x-0");
+  }
+});
+
+toTopBtn.addEventListener("click", () => {
+  window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+});
 
 // go to country details
 // card.addEventListener("click", () => {
 //   window.location.assign("./detail.html");
 // });
+
+// the chosen mode function
+function setTheMode() {
+  html.className = localStorage.getItem("mode");
+  html.classList.contains("dark")
+    ? (modeText.innerText = "Light")
+    : (modeText.innerText = "Dark");
+}
 
 // fetching rest countries api
 async function fetchData(url) {
@@ -80,12 +107,37 @@ async function fetchData(url) {
 }
 
 // generating and showing countries cards
-async function generateAndShowCards(url) {
-  const countries = await fetchData(url);
+async function startTheApp(options = {}) {
+  const countries = await fetchData(options.url);
+  options.countries = countries;
+  showCards(options);
+}
+
+// show data
+function showCards(options = {}) {
+  // generate cards
+  const cards = createCards(options);
+  // appending cards to the main container
+  cardsContainer.innerText = "";
+  cardsContainer.append(cards);
+  // content loaded? remove the loader
+  loader.classList.add("hidden");
+}
+// create cards
+function createCards(options = {}) {
+  const foundCountries = findCountries(options);
+  const newCountries = options.state ? foundCountries : [...options.countries];
+  if (newCountries.length === 0) {
+    noCardsFound.classList.remove("hidden");
+    return noCardsFound;
+  }
   const documentFragment = document.createDocumentFragment();
   // looping through the countries
-  countries.forEach((country) => {
-    if (country.name.common !== "Israel") {
+  for (let country of newCountries) {
+    if (country.name.common === "Israel") continue;
+    // create cards according to the filter
+    if (country.region === options.region || options.region === "All") {
+      // card start's here
       const cardContainer = document.createElement("div");
       cardContainer.classList.add("card");
       // creating country flag
@@ -97,9 +149,9 @@ async function generateAndShowCards(url) {
       // appending country's card to the document fragment
       documentFragment.append(cardContainer);
     }
-  });
-  cardsContainer.append(documentFragment);
-  loader.classList.add("hidden");
+  }
+  options.state = false;
+  return documentFragment;
 }
 
 // creating the flag container
@@ -169,11 +221,18 @@ function createGeneralInfo(country) {
   return textContainer;
 }
 
-// filtering by region
-function filteringCountries(region) {
-  for (let i of data) {
-    if (i.region === region) {
-      console.log("you are getting the countries with the selected region");
+// find countries function
+function findCountries(options = {}) {
+  const foundCountries = [];
+  let countryName;
+  const userValue = options.searchValue.trim().toLowerCase();
+  for (let country of options.countries) {
+    if (country.name.common === "Israel") continue;
+    countryName = country.name.common.toLowerCase();
+    if (countryName.match(userValue) !== null) {
+      if (country.region === options.region || options.region === "All")
+        foundCountries.push(country);
     }
   }
+  return foundCountries;
 }
