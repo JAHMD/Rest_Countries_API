@@ -18,17 +18,30 @@ const cardsContainer = document.getElementById("cards-container");
 const noCardsFound = document.getElementById("no-countries");
 // additional
 const toTopBtn = document.getElementById("to-top-btn");
-const options = {
+const footer = document.querySelector("footer");
+const params = {
   url: BASE_URL,
   region: "All",
   searchValue: "",
   countries: [],
+  foundCountries: [],
+  countriesToShow: [],
+  start: 0,
+  end: 0,
   state: false,
 };
+// observer
+const options = {
+  root: null,
+  rootMargin: "0px",
+  threshold: 0.5,
+};
+const observer = new IntersectionObserver(handler, options);
+observer.observe(footer);
 
 // app starts here
 document.addEventListener("loadstart", setTheMode());
-startTheApp(options);
+startTheApp(params);
 
 // change page mode
 modeBtn.addEventListener("click", () => {
@@ -49,22 +62,26 @@ modeBtn.addEventListener("click", () => {
 
 // search bar function
 searchInput.addEventListener("input", function () {
-  options.searchValue = this.value;
-  options.state = true;
-  showCards(options);
+  params.searchValue = this.value;
+  params.state = true;
+  params.end = 0;
+  cardsContainer.innerText = "";
+  observer.observe(footer);
+  showCards(params);
 });
 
 // toggling the regions menu and chose a region to show
 regionsFilter.addEventListener("click", (e) => {
-  options.state = true;
   regionsMenu.classList.toggle("active");
   regionsFilter.querySelector("i").classList.toggle("rotate-90");
   // change the filter name
   if (regions.includes(e.target)) {
     regionsFilter.querySelector("#filter p").innerText = e.target.innerText;
     const selectedRegion = e.target.innerText;
-    options.region = selectedRegion;
-    showCards(options);
+    params.region = selectedRegion;
+    params.end = 0;
+    cardsContainer.innerText = "";
+    showCards(params);
   }
 });
 
@@ -107,50 +124,57 @@ async function fetchData(url) {
 }
 
 // generating and showing countries cards
-async function startTheApp(options = {}) {
-  const countries = await fetchData(options.url);
-  options.countries = countries;
-  showCards(options);
+async function startTheApp(params = {}) {
+  const countries = await fetchData(params.url);
+  params.countries = countries;
+  params.foundCountries = [...countries];
+  showCards(params);
 }
 
 // show data
-function showCards(options = {}) {
-  // generate cards
-  const cards = createCards(options);
-  // appending cards to the main container
-  cardsContainer.innerText = "";
-  cardsContainer.append(cards);
-  // content loaded? remove the loader
-  loader.classList.add("hidden");
+function showCards(params = {}) {
+  if (params.end <= params.foundCountries.length) {
+    params.start = params.end;
+    params.end = params.start + 10;
+    // params.countriesToShow = [...params.countries].slice(
+    //   params.start,
+    //   params.end
+    // );
+    // generate cards
+    const cards = createCards(params);
+    // appending cards to the main container
+    cardsContainer.append(cards);
+    // content loaded? remove the loader
+    loader.classList.add("hidden");
+  }
 }
 // create cards
-function createCards(options = {}) {
-  const foundCountries = findCountries(options);
-  const newCountries = options.state ? foundCountries : [...options.countries];
-  if (newCountries.length === 0) {
+function createCards(params = {}) {
+  findCountries(params);
+  let newCountries = [...params.foundCountries].slice(params.start, params.end);
+  const documentFragment = document.createDocumentFragment();
+  if (params.foundCountries.length <= 10)
+    newCountries = [...params.foundCountries];
+  // show no results found
+  if (newCountries.length === 0 && params.searchValue) {
     noCardsFound.classList.remove("hidden");
     return noCardsFound;
   }
-  const documentFragment = document.createDocumentFragment();
   // looping through the countries
   for (let country of newCountries) {
     if (country.name.common === "Israel") continue;
-    // create cards according to the filter
-    if (country.region === options.region || options.region === "All") {
-      // card start's here
-      const cardContainer = document.createElement("div");
-      cardContainer.classList.add("card");
-      // creating country flag
-      const flag = createFlag(country);
-      // creating country general info
-      const generalInfo = createGeneralInfo(country);
-      // appending country's info to country's card
-      cardContainer.append(flag, generalInfo);
-      // appending country's card to the document fragment
-      documentFragment.append(cardContainer);
-    }
+    // card start's here
+    const cardContainer = document.createElement("div");
+    cardContainer.classList.add("card");
+    // creating country flag
+    const flag = createFlag(country);
+    // creating country general info
+    const generalInfo = createGeneralInfo(country);
+    // appending country's info to country's card
+    cardContainer.append(flag, generalInfo);
+    // appending country's card to the document fragment
+    documentFragment.append(cardContainer);
   }
-  options.state = false;
   return documentFragment;
 }
 
@@ -222,17 +246,24 @@ function createGeneralInfo(country) {
 }
 
 // find countries function
-function findCountries(options = {}) {
+function findCountries(params = {}) {
   const foundCountries = [];
-  let countryName;
-  const userValue = options.searchValue.trim().toLowerCase();
-  for (let country of options.countries) {
+  let countryName = "";
+  const userValue = params.searchValue.trim().toLowerCase();
+  for (let country of params.countries) {
     if (country.name.common === "Israel") continue;
     countryName = country.name.common.toLowerCase();
-    if (countryName.match(userValue) !== null) {
-      if (country.region === options.region || options.region === "All")
+    if (countryName.includes(userValue)) {
+      if (country.region === params.region || params.region === "All")
         foundCountries.push(country);
     }
   }
-  return foundCountries;
+  params.foundCountries = [...foundCountries];
+}
+
+// observer callback function
+function handler(entries) {
+  if (entries[0].isIntersecting) {
+    showCards(params);
+  }
 }

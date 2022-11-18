@@ -31,7 +31,7 @@ Users should be able to:
 
 ### Screenshot
 
-![](./imgs/Screenshot%202022-11-16%20112136.png)
+![](<./imgs/Screenshot%20(57).png>)
 
 ### Links
 
