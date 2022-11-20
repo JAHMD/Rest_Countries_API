@@ -10,10 +10,10 @@
       src="https://kit.fontawesome.com/f1c1c1e611.js"
       crossorigin="anonymous"
     ></script>
-    <script src="./public/index.js" defer></script>
+    <script src="./public/index.js" type="module" defer></script>
   </head>
   <body class="font-NunitoSans text-sm bg-light-200 dark:bg-dark-200">
-    <div
+    <section
       id="loader-container"
       class="h-full absolute inset-0 z-50 bg-light-200 dark:bg-dark-200 flex justify-center items-center"
     >
@@ -21,8 +21,8 @@
         id="loader"
         class="w-10 aspect-square rounded-full border-4 border-t-dark-100 animate-spin"
       ></div>
-    </div>
-    <section
+    </section>
+    <header
       id="page-header"
       class="shadow bg-light-100 dark:bg-dark-100 z-10 relative"
     >
@@ -42,9 +42,9 @@
           <p id="mode"><span class="inline-block"></span> Mode</p>
         </div>
       </nav>
-    </section>
+    </header>
     <main class="pt-10 bg-light-200 dark:bg-dark-200 relative">
-      <section
+      <header
         id="search-section"
         class="container mb-8 flex sm:justify-between sm:items-center flex-col sm:flex-row z-20 relative"
       >
@@ -62,8 +62,8 @@
         </div>
         <div id="region-filter" class="w-fit relative select-none text-base">
           <div
-            id="filter"
-            class="py-3 px-6 rounded-md flex justify-between items-center w-52 bg-light-100 dark:bg-dark-100 text-light-300 dark:text-white cursor-pointer shadow"
+            id="filter-btn"
+            class="py-3 px-6 rounded-md flex justify-between items-center w-52 bg-light-100 dark:bg-dark-100 text-light-300 dark:text-white dark:hover:bg-[#2a2f47] hover:bg-slate-50 cursor-pointer shadow transition-colors"
           >
             <p>Filter by Region</p>
             <i
@@ -85,10 +85,10 @@
             </ul>
           </div>
         </div>
-      </section>
+      </header>
       <section
         id="cards-container"
-        class="container space-y-8 md:space-y-0 md:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 flex-wrap"
+        class="container space-y-6 md:space-y-0 md:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 flex-wrap"
       >
         <div
           id="no-countries"
@@ -102,15 +102,93 @@
           </p>
         </div>
       </section>
-      <footer class="h-10"></footer>
-      <div
-        id="to-top-btn"
-        class="p-1 fixed bottom-4 right-4 rounded-md cursor-pointer bg-light-300 dark:bg-dark-300 transition translate-x-16"
+      <!-- <section
+        id="details-section"
+        class="w-screen place-items-center text-light-300 dark:text-dark-300 bg-light-200 dark:bg-dark-200 hidden top-[92px] left-0 z-30"
       >
-        <i
-          class="fa-solid fa-circle-up text-3xl text-light-100 dark:text-dark-100 rounded-full"
-        ></i>
-      </div>
+        <div
+          id="country-detail"
+          class="container sm:flex gap-12 lg:gap-32 justify-center md:items-center flex-col md:flex-row"
+        >
+          <div
+            id="img-holder"
+            class="md:w-1/3 rounded shrink-0 overflow-hidden shadow-md"
+          >
+            <img
+              src="https://flagcdn.com/w320/ax.png"
+              alt="flag"
+              class="object-cover w-full shadow-md"
+            />
+          </div>
+          <div
+            class="max-w-screen-sm mt-10 md:mt-0 flex flex-wrap flex-col md:flex-row"
+          >
+            <h2 id="country-name" class="w-full font-extrabold text-2xl">
+              Åland Islands
+            </h2>
+            <div
+              id="info-container"
+              class="flex flex-wrap gap-4 justify-between items-center"
+            >
+              <div id="general-info" class="mt-6 space-y-3 sm:space-y-0">
+                <p class="population text-base font-semibold tracking-wider">
+                  Population: <span class="text-sm font-light">28875</span>
+                </p>
+                <p class="region text-base font-semibold tracking-wider">
+                  Region: <span class="text-sm font-light">Europe</span>
+                </p>
+                <p class="sub-region text-base font-semibold tracking-wider">
+                  Sub Region: <span class="text-sm font-light">Brussels</span>
+                </p>
+                <p class="capital text-base font-semibold tracking-wider">
+                  Capital: <span class="text-sm font-light">Mariehamn</span>
+                </p>
+              </div>
+              <div id="extra-info" class="mt-10 lg:mt-0 space-y-3 sm:space-y-0">
+                <p
+                  id="top-level-domain"
+                  class="text-base font-semibold tracking-wider"
+                >
+                  Top Level Domain: <span class="text-sm font-light">.be</span>
+                </p>
+                <p
+                  id="cuurencies"
+                  class="text-base font-semibold tracking-wider"
+                >
+                  Currencies: <span class="text-sm font-light">Euro</span>
+                </p>
+                <p
+                  id="languages"
+                  class="text-base font-semibold tracking-wider"
+                >
+                  Languages:
+                  <span class="text-sm font-light">Dutch, French, German</span>
+                </p>
+              </div>
+              <div id="border-countries-container" class="w-full mt-10">
+                <h4 class="mb-4 text-lg font-semibold">Border Countries:</h4>
+                <div
+                  id="border-countries"
+                  class="flex gap-4 flex-wrap text-sm select-none"
+                >
+                  <div class="country btn">Country1</div>
+                  <div class="country btn">Country2</div>
+                  <div class="country btn">Country3</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section> -->
+      <footer class="h-12 mt-6"></footer>
     </main>
+    <div
+      id="to-top-btn"
+      class="p-0.5 fixed bottom-4 right-4 rounded-full cursor-pointer bg-light-300 dark:bg-dark-300 transition translate-x-16"
+    >
+      <i
+        class="fa-solid fa-circle-up mt-[2px] mx-px text-3xl text-light-100 dark:text-dark-100 rounded-full"
+      ></i>
+    </div>
   </body>
 </html>

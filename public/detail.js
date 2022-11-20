@@ -1,3 +1,4 @@
+import { params } from "./index.js";
 const html = document.documentElement;
 const modeBtn = document.getElementById("mode-container");
 const modeIcon = document.getElementById("mode-icon");
@@ -27,3 +28,4 @@ modeBtn.addEventListener("click", () => {
     window.localStorage.setItem("mode", "dark");
   }
 });
+console.log(params);

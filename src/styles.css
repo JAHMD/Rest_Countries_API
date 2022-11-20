@@ -4,7 +4,7 @@
 @tailwind utilities;
 /* npx tailwindcss -i ./src/styles.css -o ./public/styles.css --watch */
 :root {
-  --dark-100: #252a41;
+  --dark-100: hsl(229, 27%, 20%);
   --dark-200: hsl(232, 19%, 15%);
   --light-200: hsl(228, 50%, 96%);
   --light-300: hsl(229, 12%, 20%);
@@ -32,7 +32,7 @@ html.dark ::-webkit-scrollbar-thumb {
   @apply hover:bg-light-200 dark:hover:bg-dark-200 py-2 px-4 rounded-md transition-colors cursor-pointer;
 }
 .card {
-  @apply rounded-md bg-light-100 hover:bg-slate-50 dark:bg-dark-100 overflow-hidden text-light-text dark:text-dark-text shadow cursor-pointer  dark:hover:bg-[#2f3551] hover:scale-[1.02] hover:transition hover:duration-200;
+  @apply rounded-md bg-light-100 hover:bg-slate-50 dark:hover:bg-[#2a2f47]  dark:bg-dark-100 overflow-hidden text-light-text dark:text-dark-text shadow cursor-pointer  hover:scale-[1.02] transition;
 }
 .btn {
   @apply py-2 px-6 rounded-md shadow cursor-pointer bg-light-100 dark:bg-dark-100 hover:bg-gray-50 dark:hover:bg-[#2f3e4c] transition-colors duration-200;
@@ -44,6 +44,7 @@ html.dark ::-webkit-scrollbar-thumb {
     transform: scale(1);
   }
 }
-/* #cards-container {
-  min-height: calc(100vh - 262px);
-} */
+
+#details-section {
+  min-height: calc(100vh - 92px);
+}

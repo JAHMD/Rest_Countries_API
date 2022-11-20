@@ -1,5 +1,5 @@
 const BASE_URL = "https://restcountries.com/v3/all";
-const loader = document.getElementById("loader-container");
+const homePageLoader = document.getElementById("loader-container");
 // header
 const html = document.documentElement;
 const header = document.getElementById("search-section");
@@ -10,9 +10,14 @@ const modeText = document.querySelector("#mode-container #mode  span");
 const searchBar = document.getElementById("search-bar");
 const searchInput = document.getElementById("search-input");
 // filter
-const regionsFilter = document.getElementById("region-filter");
+const regionsFilterBtn = document.getElementById("filter-btn");
 const regionsMenu = document.getElementById("menu-container");
-const regions = [...regionsMenu.querySelectorAll("li")];
+const regions = [...document.querySelectorAll("#menu-container li")];
+const allowedElementsArray = [
+  regionsFilterBtn,
+  regionsMenu,
+  ...regionsFilterBtn.children,
+];
 // cards
 const cardsContainer = document.getElementById("cards-container");
 const noCardsFound = document.getElementById("no-countries");
@@ -25,7 +30,6 @@ const params = {
   searchValue: "",
   countries: [],
   foundCountries: [],
-  countriesToShow: [],
   start: 0,
   end: 0,
   state: false,
@@ -34,10 +38,9 @@ const params = {
 const options = {
   root: null,
   rootMargin: "0px",
-  threshold: 0.5,
+  threshold: 0.75,
 };
-const observer = new IntersectionObserver(handler, options);
-observer.observe(footer);
+const observer = new IntersectionObserver(observerHandler, options);
 
 // app starts here
 document.addEventListener("loadstart", setTheMode());
@@ -70,19 +73,29 @@ searchInput.addEventListener("input", function () {
   showCards(params);
 });
 
-// toggling the regions menu and chose a region to show
-regionsFilter.addEventListener("click", (e) => {
-  regionsMenu.classList.toggle("active");
-  regionsFilter.querySelector("i").classList.toggle("rotate-90");
-  // change the filter name
-  if (regions.includes(e.target)) {
-    regionsFilter.querySelector("#filter p").innerText = e.target.innerText;
+// toggling the regions menu
+document.addEventListener("click", (e) => {
+  if (!allowedElementsArray.includes(e.target)) {
+    regionsMenu.classList.remove("active");
+    regionsFilterBtn.querySelector("i").classList.remove("rotate-90");
+    return;
+  } else if (e.target !== regionsMenu) {
+    regionsMenu.classList.toggle("active");
+    regionsFilterBtn.querySelector("i").classList.toggle("rotate-90");
+  }
+});
+
+// choosing a region to show
+regions.forEach((region) => {
+  region.addEventListener("click", (e) => {
+    // change the filter name
+    regionsFilterBtn.querySelector("p").innerText = e.target.innerText;
     const selectedRegion = e.target.innerText;
     params.region = selectedRegion;
     params.end = 0;
     cardsContainer.innerText = "";
     showCards(params);
-  }
+  });
 });
 
 // show "to top" button
@@ -105,12 +118,21 @@ toTopBtn.addEventListener("click", () => {
 //   window.location.assign("./detail.html");
 // });
 
+// functions go here --------------------------------------------
+
 // the chosen mode function
 function setTheMode() {
   html.className = localStorage.getItem("mode");
   html.classList.contains("dark")
     ? (modeText.innerText = "Light")
     : (modeText.innerText = "Dark");
+}
+
+// observer callback function
+function observerHandler(entries) {
+  if (entries[0].isIntersecting) {
+    showCards(params);
+  }
 }
 
 // fetching rest countries api
@@ -128,6 +150,8 @@ async function startTheApp(params = {}) {
   const countries = await fetchData(params.url);
   params.countries = countries;
   params.foundCountries = [...countries];
+  // start observing and showing cards
+  observer.observe(footer);
   showCards(params);
 }
 
@@ -136,18 +160,15 @@ function showCards(params = {}) {
   if (params.end <= params.foundCountries.length) {
     params.start = params.end;
     params.end = params.start + 10;
-    // params.countriesToShow = [...params.countries].slice(
-    //   params.start,
-    //   params.end
-    // );
-    // generate cards
     const cards = createCards(params);
     // appending cards to the main container
     cardsContainer.append(cards);
+    countryDetails();
     // content loaded? remove the loader
-    loader.classList.add("hidden");
+    homePageLoader.classList.add("hidden");
   }
 }
+
 // create cards
 function createCards(params = {}) {
   findCountries(params);
@@ -166,6 +187,7 @@ function createCards(params = {}) {
     // card start's here
     const cardContainer = document.createElement("div");
     cardContainer.classList.add("card");
+    cardContainer.id = country.name.common;
     // creating country flag
     const flag = createFlag(country);
     // creating country general info
@@ -261,9 +283,13 @@ function findCountries(params = {}) {
   params.foundCountries = [...foundCountries];
 }
 
-// observer callback function
-function handler(entries) {
-  if (entries[0].isIntersecting) {
-    showCards(params);
-  }
+// country details
+function countryDetails() {
+  const cards = document.querySelectorAll(".card");
+  cards.forEach((country) => {
+    country.addEventListener("click", function () {});
+  });
 }
+
+// exports
+export { params };
