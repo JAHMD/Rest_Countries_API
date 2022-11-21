@@ -302,7 +302,6 @@ function createAdditionalInfo(country) {
   topLevelDomainCon.innerText = "Top Level Domain: ";
   const topLevelDomain = document.createElement("span");
   topLevelDomain.innerText = `(${country.tld.join(", ")})`;
-  console.log(country);
   topLevelDomainCon.append(topLevelDomain);
   // currencies
   const currenciesCon = document.createElement("p");
@@ -434,7 +433,6 @@ function createBorderCountries(borderCountries) {
 
 // change the country details according to the selected border country
 function changeCountryDetails(borderCountries) {
-  console.log(borderCountries);
   borderCountries.forEach((borderCountry) => {
     borderCountry.addEventListener("click", function () {
       countryDetails(this.innerText);
