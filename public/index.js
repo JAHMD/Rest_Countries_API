@@ -2,10 +2,12 @@ const BASE_URL = "https://restcountries.com/v3/all";
 const homePageLoader = document.getElementById("loader-container");
 // header
 const html = document.documentElement;
-const header = document.getElementById("search-section");
+const pageHeader = document.getElementById("page-header");
 const modeBtn = document.getElementById("mode-container");
 const modeIcon = document.getElementById("mode-icon");
 const modeText = document.querySelector("#mode-container #mode  span");
+// main section
+const main = document.querySelector("main");
 // search
 const searchBar = document.getElementById("search-bar");
 const searchInput = document.getElementById("search-input");
@@ -18,9 +20,16 @@ const allowedElementsArray = [
   regionsMenu,
   ...regionsFilterBtn.children,
 ];
-// cards
+// countries's cards
 const cardsContainer = document.getElementById("cards-container");
 const noCardsFound = document.getElementById("no-countries");
+// country details
+const countryDetailsSection = document.getElementById("details-section");
+const countryDetailsContainer = document.getElementById(
+  "country-details-container"
+);
+const detailsContent = document.getElementById("country-details-content");
+const backBtn = document.getElementById("back-btn");
 // additional
 const toTopBtn = document.getElementById("to-top-btn");
 const footer = document.querySelector("footer");
@@ -69,7 +78,6 @@ searchInput.addEventListener("input", function () {
   params.state = true;
   params.end = 0;
   cardsContainer.innerText = "";
-  observer.observe(footer);
   showCards(params);
 });
 
@@ -94,7 +102,7 @@ regions.forEach((region) => {
     params.region = selectedRegion;
     params.end = 0;
     cardsContainer.innerText = "";
-    showCards(params);
+    // showCards(params);
   });
 });
 
@@ -114,9 +122,13 @@ toTopBtn.addEventListener("click", () => {
 });
 
 // go to country details
-// card.addEventListener("click", () => {
-//   window.location.assign("./detail.html");
-// });
+backBtn.addEventListener("click", () => {
+  countryDetailsSection.classList.remove("active");
+  pageHeader.classList.add("relative");
+  pageHeader.classList.remove(..."fixed w-full".split(" "));
+  document.body.classList.remove("overflow-y-hidden");
+  main.classList.remove("pt-32");
+});
 
 // functions go here --------------------------------------------
 
@@ -148,8 +160,11 @@ async function fetchData(url) {
 // generating and showing countries cards
 async function startTheApp(params = {}) {
   const countries = await fetchData(params.url);
-  params.countries = countries;
-  params.foundCountries = [...countries];
+  for (let country of countries) {
+    if (country.name.common === "Israel") continue;
+    params.countries.push(country);
+  }
+  params.foundCountries = [...params.countries];
   // start observing and showing cards
   observer.observe(footer);
   showCards(params);
@@ -163,7 +178,7 @@ function showCards(params = {}) {
     const cards = createCards(params);
     // appending cards to the main container
     cardsContainer.append(cards);
-    countryDetails();
+    countryDetailsWindow();
     // content loaded? remove the loader
     homePageLoader.classList.add("hidden");
   }
@@ -183,15 +198,21 @@ function createCards(params = {}) {
   }
   // looping through the countries
   for (let country of newCountries) {
-    if (country.name.common === "Israel") continue;
     // card start's here
     const cardContainer = document.createElement("div");
     cardContainer.classList.add("card");
     cardContainer.id = country.name.common;
     // creating country flag
     const flag = createFlag(country);
+    flag.className = "img-holder h-44 lg:h-40 flex";
     // creating country general info
+    const countryName = createCountryName(country);
+    countryName.className =
+      "mb-5 font-extrabold text-xl text-light-300 dark:text-dark-300";
+    // other info
     const generalInfo = createGeneralInfo(country);
+    generalInfo.classList.add("p-6");
+    generalInfo.prepend(countryName);
     // appending country's info to country's card
     cardContainer.append(flag, generalInfo);
     // appending country's card to the document fragment
@@ -204,10 +225,9 @@ function createCards(params = {}) {
 function createFlag(country) {
   // flag holder
   const flagContainer = document.createElement("div");
-  flagContainer.classList.add(..."img-holder h-44 lg:h-40 flex".split(" "));
   // flag
   const flagImg = document.createElement("img");
-  flagImg.classList.add(..."object-cover w-full h-full".split(" "));
+  flagImg.className = "object-cover w-full h-full";
   flagImg.alt = "flag";
   flagImg.src = country.flags[1];
   // appending the flag to its container
@@ -216,20 +236,17 @@ function createFlag(country) {
 }
 
 // creating country card's info
-function createGeneralInfo(country) {
-  const textContainer = document.createElement("div");
-  textContainer.classList.add(..."text-container p-6".split(" "));
-  // country's name
-  const countryName = document.createElement("h3");
-  countryName.classList.add(
-    ..."country-name mb-6 font-extrabold text-xl text-light-300 dark:text-dark-300".split(
-      " "
-    )
-  );
+function createCountryName(country) {
+  const countryName = document.createElement("h2");
+  countryName.classList.add("country-name");
   countryName.innerText = country.name.common;
+  return countryName;
+}
+
+function createGeneralInfo(country, subRegion = "") {
   // country info
-  const infoContainer = document.createElement("div");
-  infoContainer.classList.add(..."info-container space-y-2".split(" "));
+  const generalInfoContainer = document.createElement("div");
+  generalInfoContainer.className = "general-info-container space-y-2";
   // country's population
   const populationCont = document.createElement("p");
   const population = document.createElement("span");
@@ -240,16 +257,6 @@ function createGeneralInfo(country) {
   population.classList.add("text-sm", "font-light");
   population.innerText = country.population;
   populationCont.append(population);
-  // country's region
-  const regionCont = document.createElement("p");
-  const region = document.createElement("span");
-  regionCont.classList.add(
-    ..."region text-base font-semibold tracking-wider".split(" ")
-  );
-  regionCont.innerText = "Region: ";
-  region.classList.add("text-sm", "font-light");
-  region.innerText = country.region;
-  regionCont.append(region);
   // country's capital
   const capitalCont = document.createElement("p");
   const capital = document.createElement("span");
@@ -260,11 +267,78 @@ function createGeneralInfo(country) {
   capital.classList.add("text-sm", "font-light", "leading-relaxed");
   capital.innerText = country?.capital?.join(", ") ?? "No capital";
   capitalCont.append(capital);
+  // country's region
+  const regionCont = document.createElement("p");
+  const region = document.createElement("span");
+  regionCont.classList.add(
+    ..."region text-base font-semibold tracking-wider".split(" ")
+  );
+  regionCont.innerText = "Region: ";
+  region.classList.add("text-sm", "font-light");
+  region.innerText = country.region;
+  regionCont.append(region);
   // appending info to info container
-  infoContainer.append(populationCont, regionCont, capitalCont);
-  // appending the elements to the text container
-  textContainer.append(countryName, infoContainer);
-  return textContainer;
+  generalInfoContainer.append(populationCont, capitalCont, regionCont);
+  // subregion
+  if (subRegion) {
+    const subregionCon = document.createElement("p");
+    subregionCon.className = "text-base font-semibold tracking-wider";
+    subregionCon.innerText = "Subregion: ";
+    const subregion = document.createElement("span");
+    subregion.className = "text-sm font-light";
+    subregion.innerText = subRegion;
+    subregionCon.append(subregion);
+    generalInfoContainer.append(subregionCon);
+  }
+  return generalInfoContainer;
+}
+
+// create additional info
+function createAdditionalInfo(country) {
+  const additionalInfoContainer = document.createElement("div");
+  additionalInfoContainer.className = "mt-10 sm:mt-0 space-y-2 max-w-[250px]";
+  // top level domain
+  const topLevelDomainCon = document.createElement("p");
+  topLevelDomainCon.innerText = "Top Level Domain: ";
+  const topLevelDomain = document.createElement("span");
+  topLevelDomain.innerText = `(${country.tld.join(", ")})`;
+  console.log(country);
+  topLevelDomainCon.append(topLevelDomain);
+  // currencies
+  const currenciesCon = document.createElement("p");
+  currenciesCon.innerText = "Currencies: ";
+  const currencies = document.createElement("span");
+  const currenciesArray = [];
+  for (let i in country.currencies) {
+    currenciesArray.push(country.currencies[i].name);
+  }
+  currencies.innerText = currenciesArray.join(", ");
+  currenciesCon.append(currencies);
+  // languages
+  const languagesCon = document.createElement("p");
+  languagesCon.innerText = "Languages: ";
+  const languages = document.createElement("span");
+  const languagesArray = [];
+  for (let i in country.languages) {
+    languagesArray.push(country.languages[i]);
+  }
+  languages.innerText = languagesArray;
+  languagesCon.append(languages);
+  // adding style to the elements
+  [topLevelDomainCon, currenciesCon, languagesCon].forEach(
+    (container) =>
+      (container.className = "text-base font-semibold tracking-wider")
+  );
+  [topLevelDomain, currencies, languages].forEach(
+    (span) => (span.className = "text-sm font-light")
+  );
+  // appending the elements to the container
+  additionalInfoContainer.append(
+    topLevelDomainCon,
+    currenciesCon,
+    languagesCon
+  );
+  return additionalInfoContainer;
 }
 
 // find countries function
@@ -273,7 +347,6 @@ function findCountries(params = {}) {
   let countryName = "";
   const userValue = params.searchValue.trim().toLowerCase();
   for (let country of params.countries) {
-    if (country.name.common === "Israel") continue;
     countryName = country.name.common.toLowerCase();
     if (countryName.includes(userValue)) {
       if (country.region === params.region || params.region === "All")
@@ -284,12 +357,87 @@ function findCountries(params = {}) {
 }
 
 // country details
-function countryDetails() {
-  const cards = document.querySelectorAll(".card");
-  cards.forEach((country) => {
-    country.addEventListener("click", function () {});
+function countryDetailsWindow() {
+  const countriesCards = document.querySelectorAll(".card");
+  countriesCards.forEach((countryCard) => {
+    countryCard.addEventListener("click", function () {
+      countryDetails(this.id);
+
+      countryDetailsSection.classList.add("active");
+      pageHeader.classList.remove("relative");
+      pageHeader.classList.add(..."fixed w-full".split(" "));
+      document.body.classList.add("overflow-y-hidden");
+      main.classList.add("pt-32");
+    });
   });
 }
 
-// exports
-export { params };
+// adding selected country details
+function countryDetails(countryName) {
+  countryDetailsContainer.innerText = "";
+  detailsContent.innerText = "";
+  const infoContainer = document.createElement("div");
+  infoContainer.id = "info-container";
+  infoContainer.className =
+    "w-full flex flex-wrap sm:gap-4 justify-between items-center text-light-text dark:text-dark-text";
+
+  for (let country of params.countries) {
+    if (country.name.common === countryName) {
+      // creating country flag
+      const flag = createFlag(country);
+      flag.className =
+        "img-holer rounded-md shrink-0 overflow-hidden shadow-md";
+
+      const countryName = createCountryName(country);
+      countryName.className = "mb-6 w-full font-extrabold text-2xl";
+
+      const generalInfo = createGeneralInfo(country, country.subregion ?? "");
+      const additionalInfo = createAdditionalInfo(country);
+      infoContainer.append(generalInfo, additionalInfo);
+      detailsContent.append(countryName, infoContainer);
+      if (country.borders) {
+        const borderCountriesContainer = createBorderCountries(country.borders);
+        detailsContent.append(borderCountriesContainer);
+      }
+      countryDetailsContainer.append(flag, detailsContent);
+    }
+  }
+}
+
+// border countries
+function createBorderCountries(borderCountries) {
+  const borderCountriesSection = document.createElement("div");
+  borderCountriesSection.id = "border-countries-container";
+  borderCountriesSection.className = "w-full mt-10";
+
+  const bordersHeader = document.createElement("h3");
+  bordersHeader.className = "header mb-4 text-lg font-semibold";
+  bordersHeader.innerText = "Border Countries: ";
+
+  const borderCountriesContainer = document.createElement("div");
+  borderCountriesContainer.className =
+    "flex gap-4 flex-wrap text-sm select-none";
+  for (let countryAbbr of borderCountries) {
+    const countryBtn = document.createElement("div");
+    countryBtn.className = "country btn";
+    for (let country of params.countries) {
+      if (country.cca3 === countryAbbr) {
+        countryBtn.innerText = country.name.common;
+        borderCountriesContainer.append(countryBtn);
+      }
+    }
+  }
+  changeCountryDetails([...borderCountriesContainer.children]);
+  borderCountriesSection.append(bordersHeader, borderCountriesContainer);
+  return borderCountriesSection;
+}
+
+// change the country details according to the selected border country
+function changeCountryDetails(borderCountries) {
+  console.log(borderCountries);
+  borderCountries.forEach((borderCountry) => {
+    borderCountry.addEventListener("click", function () {
+      countryDetails(this.innerText);
+    });
+  });
+}

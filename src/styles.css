@@ -35,7 +35,7 @@ html.dark ::-webkit-scrollbar-thumb {
   @apply rounded-md bg-light-100 hover:bg-slate-50 dark:hover:bg-[#2a2f47]  dark:bg-dark-100 overflow-hidden text-light-text dark:text-dark-text shadow cursor-pointer  hover:scale-[1.02] transition;
 }
 .btn {
-  @apply py-2 px-6 rounded-md shadow cursor-pointer bg-light-100 dark:bg-dark-100 hover:bg-gray-50 dark:hover:bg-[#2f3e4c] transition-colors duration-200;
+  @apply py-2 px-6 rounded-md shadow cursor-pointer bg-light-100 hover:bg-slate-50 dark:hover:bg-[#2a2f47]  dark:bg-dark-100 transition-colors duration-200;
 }
 @layer components {
   #menu-container.active {
@@ -46,5 +46,10 @@ html.dark ::-webkit-scrollbar-thumb {
 }
 
 #details-section {
-  min-height: calc(100vh - 92px);
+  height: calc(100vh - 92px);
+}
+@layer components {
+  #details-section.active {
+    @apply translate-x-0;
+  }
 }
