@@ -102,7 +102,7 @@ regions.forEach((region) => {
     params.region = selectedRegion;
     params.end = 0;
     cardsContainer.innerText = "";
-    // showCards(params);
+    showCards(params);
   });
 });
 
