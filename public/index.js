@@ -122,13 +122,7 @@ toTopBtn.addEventListener("click", () => {
 });
 
 // go to country details
-backBtn.addEventListener("click", () => {
-  countryDetailsSection.classList.remove("active");
-  pageHeader.classList.add("relative");
-  pageHeader.classList.remove(..."fixed w-full".split(" "));
-  document.body.classList.remove("overflow-y-hidden");
-  main.classList.remove("pt-32");
-});
+backBtn.addEventListener("click", closeDetailsWindow);
 
 // functions go here --------------------------------------------
 
@@ -250,9 +244,8 @@ function createGeneralInfo(country, subRegion = "") {
   // country's population
   const populationCont = document.createElement("p");
   const population = document.createElement("span");
-  populationCont.classList.add(
-    ..."population text-base font-semibold tracking-wider".split(" ")
-  );
+  populationCont.className =
+    "population text-base font-semibold tracking-wider";
   populationCont.innerText = "Population: ";
   population.classList.add("text-sm", "font-light");
   population.innerText = country.population;
@@ -260,9 +253,7 @@ function createGeneralInfo(country, subRegion = "") {
   // country's capital
   const capitalCont = document.createElement("p");
   const capital = document.createElement("span");
-  capitalCont.classList.add(
-    ..."capital text-base font-semibold tracking-wider".split(" ")
-  );
+  capitalCont.className = "capital text-base font-semibold tracking-wider";
   capitalCont.innerText = "Capital: ";
   capital.classList.add("text-sm", "font-light", "leading-relaxed");
   capital.innerText = country?.capital?.join(", ") ?? "No capital";
@@ -270,9 +261,7 @@ function createGeneralInfo(country, subRegion = "") {
   // country's region
   const regionCont = document.createElement("p");
   const region = document.createElement("span");
-  regionCont.classList.add(
-    ..."region text-base font-semibold tracking-wider".split(" ")
-  );
+  regionCont.className = "region text-base font-semibold tracking-wider";
   regionCont.innerText = "Region: ";
   region.classList.add("text-sm", "font-light");
   region.innerText = country.region;
@@ -301,7 +290,8 @@ function createAdditionalInfo(country) {
   const topLevelDomainCon = document.createElement("p");
   topLevelDomainCon.innerText = "Top Level Domain: ";
   const topLevelDomain = document.createElement("span");
-  topLevelDomain.innerText = `(${country?.tld?.join(", ")})` ?? "Unknown";
+  const tldValue = country?.tld?.join(", ") ?? "Unknown";
+  topLevelDomain.innerText = `(${tldValue})`;
   topLevelDomainCon.append(topLevelDomain);
   // currencies
   const currenciesCon = document.createElement("p");
@@ -361,7 +351,6 @@ function countryDetailsWindow() {
   countriesCards.forEach((countryCard) => {
     countryCard.addEventListener("click", function () {
       countryDetails(this.id);
-
       countryDetailsSection.classList.add("active");
       pageHeader.classList.remove("relative");
       pageHeader.classList.add(..."fixed w-full".split(" "));
@@ -386,14 +375,15 @@ function countryDetails(countryName) {
       const flag = createFlag(country);
       flag.className =
         "img-holer rounded-md shrink-0 overflow-hidden shadow-md";
-
+      // country name
       const countryName = createCountryName(country);
       countryName.className = "mb-6 w-full font-extrabold text-2xl";
-
+      // country info
       const generalInfo = createGeneralInfo(country, country.subregion ?? "");
       const additionalInfo = createAdditionalInfo(country);
       infoContainer.append(generalInfo, additionalInfo);
       detailsContent.append(countryName, infoContainer);
+      // border countries
       if (country.borders) {
         const borderCountriesContainer = createBorderCountries(country.borders);
         detailsContent.append(borderCountriesContainer);
@@ -408,11 +398,11 @@ function createBorderCountries(borderCountries) {
   const borderCountriesSection = document.createElement("div");
   borderCountriesSection.id = "border-countries-container";
   borderCountriesSection.className = "w-full mt-10";
-
+  // border countries header
   const bordersHeader = document.createElement("h3");
   bordersHeader.className = "header mb-4 text-lg font-semibold";
   bordersHeader.innerText = "Border Countries: ";
-
+  // border countries
   const borderCountriesContainer = document.createElement("div");
   borderCountriesContainer.className =
     "flex gap-4 flex-wrap text-sm select-none";
@@ -438,4 +428,13 @@ function changeCountryDetails(borderCountries) {
       countryDetails(this.innerText);
     });
   });
+}
+
+// closing the details window
+function closeDetailsWindow() {
+  countryDetailsSection.classList.remove("active");
+  pageHeader.classList.add("relative");
+  pageHeader.classList.remove(..."fixed w-full".split(" "));
+  document.body.classList.remove("overflow-y-hidden");
+  main.classList.remove("pt-32");
 }
