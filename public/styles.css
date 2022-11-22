@@ -958,6 +958,10 @@ video {
   padding-top: 8rem;
 }
 
+.pb-16{
+  padding-bottom: 4rem;
+}
+
 .font-NunitoSans{
   font-family: Nunito Sans, sans-serif;
 }
