@@ -946,13 +946,12 @@ video {
   padding-bottom: 0.75rem;
 }
 
-.py-10{
-  padding-top: 2.5rem;
-  padding-bottom: 2.5rem;
-}
-
 .pt-10{
   padding-top: 2.5rem;
+}
+
+.pb-14{
+  padding-bottom: 3.5rem;
 }
 
 .pt-32{
@@ -1328,19 +1327,15 @@ html.dark ::-webkit-scrollbar-thumb {
   .sm\:gap-4{
     gap: 1rem;
   }
+
+  .sm\:pb-10{
+    padding-bottom: 2.5rem;
+  }
 }
 
 @media (min-width: 768px){
   .md\:mt-0{
     margin-top: 0px;
-  }
-
-  .md\:grid{
-    display: grid;
-  }
-
-  .md\:grid-cols-3{
-    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .md\:flex-row{
@@ -1383,10 +1378,6 @@ html.dark ::-webkit-scrollbar-thumb {
 }
 
 @media (min-width: 1024px){
-  .lg\:mt-0{
-    margin-top: 0px;
-  }
-
   .lg\:h-40{
     height: 10rem;
   }
