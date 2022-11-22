@@ -40,8 +40,7 @@ Users should be able to:
 
 ## My process
 
-I finished the styles part and I could fetching the data from the api and show up the data about each country in the main page.
-I still have to add some functionality to the app such as filtering the countries according to their region and make the user able to search about the country that he want.
+Done.
 
 ### Built with
 
