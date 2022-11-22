@@ -301,7 +301,7 @@ function createAdditionalInfo(country) {
   const topLevelDomainCon = document.createElement("p");
   topLevelDomainCon.innerText = "Top Level Domain: ";
   const topLevelDomain = document.createElement("span");
-  topLevelDomain.innerText = `(${country.tld.join(", ")})`;
+  topLevelDomain.innerText = `(${country?.tld?.join(", ")})` ?? "Unknown";
   topLevelDomainCon.append(topLevelDomain);
   // currencies
   const currenciesCon = document.createElement("p");
