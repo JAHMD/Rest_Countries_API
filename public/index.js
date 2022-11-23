@@ -3,9 +3,9 @@ const homePageLoader = document.getElementById("loader-container");
 // header
 const html = document.documentElement;
 const pageHeader = document.getElementById("page-header");
-const modeBtn = document.getElementById("mode-container");
+const modeBtn = document.getElementById("mode-btn");
 const modeIcon = document.getElementById("mode-icon");
-const modeText = document.querySelector("#mode-container #mode  span");
+const modeText = document.querySelector("#mode-btn #mode-text  span");
 // main section
 const main = document.querySelector("main");
 // search
@@ -97,7 +97,8 @@ document.addEventListener("click", (e) => {
 regions.forEach((region) => {
   region.addEventListener("click", (e) => {
     // change the filter name
-    regionsFilterBtn.querySelector("p").innerText = e.target.innerText;
+    regionsFilterBtn.querySelector(".filter-text").innerText =
+      e.target.innerText;
     const selectedRegion = e.target.innerText;
     params.region = selectedRegion;
     params.end = 0;
@@ -125,7 +126,6 @@ toTopBtn.addEventListener("click", () => {
 backBtn.addEventListener("click", closeDetailsWindow);
 
 // functions go here --------------------------------------------
-
 // the chosen mode function
 function setTheMode() {
   html.className = localStorage.getItem("mode");
@@ -193,9 +193,9 @@ function createCards(params = {}) {
   // looping through the countries
   for (let country of newCountries) {
     // card start's here
-    const cardContainer = document.createElement("div");
+    const cardContainer = document.createElement("article");
     cardContainer.classList.add("card");
-    cardContainer.id = country.name.common;
+    cardContainer.id = country.name.common.replaceAll(" ", "-");
     // creating country flag
     const flag = createFlag(country);
     flag.className = "img-holder h-44 lg:h-40 flex";
@@ -222,7 +222,7 @@ function createFlag(country) {
   // flag
   const flagImg = document.createElement("img");
   flagImg.className = "object-cover w-full h-full";
-  flagImg.alt = "flag";
+  flagImg.alt = `${country.name.common} flag`;
   flagImg.src = country.flags[1];
   // appending the flag to its container
   flagContainer.append(flagImg);
@@ -239,10 +239,10 @@ function createCountryName(country) {
 
 function createGeneralInfo(country, subRegion = "") {
   // country info
-  const generalInfoContainer = document.createElement("div");
+  const generalInfoContainer = document.createElement("ul");
   generalInfoContainer.className = "general-info-container space-y-2";
   // country's population
-  const populationCont = document.createElement("p");
+  const populationCont = document.createElement("li");
   const population = document.createElement("span");
   populationCont.className =
     "population text-base font-semibold tracking-wider";
@@ -251,7 +251,7 @@ function createGeneralInfo(country, subRegion = "") {
   population.innerText = country.population;
   populationCont.append(population);
   // country's capital
-  const capitalCont = document.createElement("p");
+  const capitalCont = document.createElement("li");
   const capital = document.createElement("span");
   capitalCont.className = "capital text-base font-semibold tracking-wider";
   capitalCont.innerText = "Capital: ";
@@ -259,7 +259,7 @@ function createGeneralInfo(country, subRegion = "") {
   capital.innerText = country?.capital?.join(", ") ?? "No capital";
   capitalCont.append(capital);
   // country's region
-  const regionCont = document.createElement("p");
+  const regionCont = document.createElement("li");
   const region = document.createElement("span");
   regionCont.className = "region text-base font-semibold tracking-wider";
   regionCont.innerText = "Region: ";
@@ -270,7 +270,7 @@ function createGeneralInfo(country, subRegion = "") {
   generalInfoContainer.append(populationCont, capitalCont, regionCont);
   // subregion
   if (subRegion) {
-    const subregionCon = document.createElement("p");
+    const subregionCon = document.createElement("li");
     subregionCon.className = "text-base font-semibold tracking-wider";
     subregionCon.innerText = "Subregion: ";
     const subregion = document.createElement("span");
@@ -284,17 +284,17 @@ function createGeneralInfo(country, subRegion = "") {
 
 // create additional info
 function createAdditionalInfo(country) {
-  const additionalInfoContainer = document.createElement("div");
+  const additionalInfoContainer = document.createElement("ul");
   additionalInfoContainer.className = "mt-10 sm:mt-0 space-y-2 max-w-[250px]";
   // top level domain
-  const topLevelDomainCon = document.createElement("p");
+  const topLevelDomainCon = document.createElement("li");
   topLevelDomainCon.innerText = "Top Level Domain: ";
   const topLevelDomain = document.createElement("span");
   const tldValue = country?.tld?.join(", ") ?? "Unknown";
   topLevelDomain.innerText = `(${tldValue})`;
   topLevelDomainCon.append(topLevelDomain);
   // currencies
-  const currenciesCon = document.createElement("p");
+  const currenciesCon = document.createElement("li");
   currenciesCon.innerText = "Currencies: ";
   const currencies = document.createElement("span");
   const currenciesArray = [];
@@ -304,7 +304,7 @@ function createAdditionalInfo(country) {
   currencies.innerText = currenciesArray.join(", ");
   currenciesCon.append(currencies);
   // languages
-  const languagesCon = document.createElement("p");
+  const languagesCon = document.createElement("li");
   languagesCon.innerText = "Languages: ";
   const languages = document.createElement("span");
   const languagesArray = [];
@@ -350,7 +350,8 @@ function countryDetailsWindow() {
   const countriesCards = document.querySelectorAll(".card");
   countriesCards.forEach((countryCard) => {
     countryCard.addEventListener("click", function () {
-      countryDetails(this.id);
+      const countryName = this.id.replaceAll("-", " ");
+      countryDetails(countryName);
       countryDetailsSection.classList.add("active");
       pageHeader.classList.remove("relative");
       pageHeader.classList.add(..."fixed w-full".split(" "));
@@ -358,6 +359,15 @@ function countryDetailsWindow() {
       main.classList.add("pt-32");
     });
   });
+}
+
+// closing the details window
+function closeDetailsWindow() {
+  countryDetailsSection.classList.remove("active");
+  pageHeader.classList.add("relative");
+  pageHeader.classList.remove(..."fixed w-full".split(" "));
+  document.body.classList.remove("overflow-y-hidden");
+  main.classList.remove("pt-32");
 }
 
 // adding selected country details
@@ -407,8 +417,9 @@ function createBorderCountries(borderCountries) {
   borderCountriesContainer.className =
     "flex gap-4 flex-wrap text-sm select-none";
   for (let countryAbbr of borderCountries) {
-    const countryBtn = document.createElement("div");
+    const countryBtn = document.createElement("button");
     countryBtn.className = "country btn";
+    countryBtn.type = "button";
     for (let country of params.countries) {
       if (country.cca3 === countryAbbr) {
         countryBtn.innerText = country.name.common;
@@ -428,13 +439,4 @@ function changeCountryDetails(borderCountries) {
       countryDetails(this.innerText);
     });
   });
-}
-
-// closing the details window
-function closeDetailsWindow() {
-  countryDetailsSection.classList.remove("active");
-  pageHeader.classList.add("relative");
-  pageHeader.classList.remove(..."fixed w-full".split(" "));
-  document.body.classList.remove("overflow-y-hidden");
-  main.classList.remove("pt-32");
 }
