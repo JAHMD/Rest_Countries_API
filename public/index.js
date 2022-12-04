@@ -168,7 +168,7 @@ async function startTheApp(params = {}) {
 function showCards(params = {}) {
   if (params.end <= params.foundCountries.length) {
     params.start = params.end;
-    params.end = params.start + 10;
+    params.end = params.start + 20;
     const cards = createCards(params);
     // appending cards to the main container
     cardsContainer.append(cards);

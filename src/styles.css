@@ -44,10 +44,6 @@ html.dark ::-webkit-scrollbar-thumb {
     transform: scale(1);
   }
 }
-
-#details-section {
-  height: calc(100vh - 92px);
-}
 @layer components {
   #details-section.active {
     @apply translate-x-0;
